@@ -1,0 +1,9 @@
+Django>=4.2
+gunicorn
+psycopg2-binary
+django-allauth
+requests
+PyJWT
+cryptography
+pillow
+django-widget-tweaks

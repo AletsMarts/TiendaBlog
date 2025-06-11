@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Productos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Lista de Productos</h1>
+
+  <!-- FORMULARIO DE BÚSQUEDA Y FILTRO -->
+  <form method="get" class="row g-2 mb-4">
+    <div class="col-md-6">
+      <input type="text" name="q" class="form-control" placeholder="Buscar productos..." value="{{ query }}">
+    </div>
+    <div class="col-md-4">
+      <select name="categoria" class="form-select">
+        <option value="">Todas las categorías</option>
+        {% for cat in categorias %}
+          <option value="{{ cat.id }}" {% if categoria_id|default:"" == cat.id|stringformat:"s" %}selected{% endif %}>
+            {{ cat.nombre }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </div>
+  </form>
+
+  <!-- LISTA DE PRODUCTOS -->
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for producto in productos %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <a href="{% url 'detalle_producto' producto.id %}" style="text-decoration: none; color: inherit;">
+            <img src="{% if producto.imagen %}{{ producto.imagen.url }}{% else %}/media/productos/no-image.jpg{% endif %}" 
+                 class="card-img-top" style="height: 250px; object-fit: cover;" alt="{{ producto.nombre }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ producto.nombre }}</h5>
+              <p class="card-text">{{ producto.descripcion }}</p>
+              <p class="text-muted fw-bold">${{ producto.precio }}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col">
+        <div class="alert alert-info w-100 text-center">No se encontraron productos.</div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+

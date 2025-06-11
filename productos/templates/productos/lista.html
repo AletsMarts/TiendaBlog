@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Inicio{% endblock %}
+{% block content %}
+<h1>Productos</h1>
+
+<!-- Barra de búsqueda -->
+<form method="get" class="d-flex mb-3">
+    <input class="form-control me-2" type="search" name="q" placeholder="Buscar producto..." value="{{ request.GET.q }}">
+    <button class="btn btn-outline-primary" type="submit">Buscar</button>
+</form>
+
+<a href="{% url 'crear_producto' %}" class="btn btn-success mb-3">Agregar producto</a>
+
+<div class="row">
+    {% for producto in productos %}
+        <div class="col-md-4">
+            <div class="card mb-3">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'no-image.png' %}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-primary">Ver más</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No se encontraron productos.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+

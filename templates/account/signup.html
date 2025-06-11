@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account %}
+
+{% block title %}Registrarse{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="text-center mb-4">{% trans "Crear cuenta" %}</h2>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'account_signup' %}" class="border p-4 shadow-sm rounded bg-light">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+            {{ redirect_field }}
+
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-success">{% trans "Registrarse" %}</button>
+            </div>
+
+            <div class="text-center">
+                <a href="{% url 'account_login' %}">{% trans "¿Ya tienes cuenta? Inicia sesión" %}</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Detalle{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">{{ producto.nombre }}</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <img src="{{ producto.imagen.url }}" class="img-fluid rounded shadow mb-3" style="max-height: 400px;" alt="{{ producto.nombre }}">
+    </div>
+    <div class="col-md-6">
+        <h4>Descripción</h4>
+        <p>{{ producto.descripcion }}</p>
+        <h5 class="text-success">${{ producto.precio }}</h5>
+        <p><strong>Stock:</strong> {{ producto.stock }}</p>
+    </div>
+</div>
+
+<hr>
+
+<h3>Comentarios</h3>
+{% for comentario in comentarios %}
+    <div class="border rounded p-3 mb-3">
+        <p><strong>{{ comentario.autor }}</strong> <span class="text-muted">({{ comentario.fecha|date:"d M Y H:i" }})</span></p>
+        <p>{{ comentario.texto }}</p>
+        {% if comentario.imagen %}
+            <img src="{{ comentario.imagen.url }}" class="img-fluid rounded" style="max-width: 300px;" alt="Imagen de comentario">
+        {% endif %}
+    </div>
+{% empty %}
+    <p class="text-muted">No hay comentarios aún.</p>
+{% endfor %}
+
+<hr>
+
+<h4>Agregar comentario</h4>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Enviar</button>
+</form>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account %}
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="text-center mb-4">{% trans "Iniciar sesión" %}</h2>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'account_login' %}" class="border p-4 shadow-sm rounded bg-light">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="id_login" class="form-label">{% trans "Correo o nombre de usuario" %}</label>
+                {{ form.login }}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_password" class="form-label">{% trans "Contraseña" %}</label>
+                {{ form.password }}
+            </div>
+
+            <div class="form-check mb-3">
+                {{ form.remember }}
+                <label class="form-check-label" for="id_remember">{% trans "Recordarme" %}</label>
+            </div>
+
+            {{ redirect_field }}
+
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary">{% trans "Iniciar sesión" %}</button>
+            </div>
+
+            <div class="text-center">
+                <a href="{% url 'account_reset_password' %}">{% trans "¿Olvidaste tu contraseña?" %}</a><br>
+                <a href="{% url 'account_signup' %}">{% trans "¿No tienes cuenta? Regístrate" %}</a>
+            </div>
+        </form>
+
+        {% if SOCIALACCOUNT_ENABLED %}
+            <hr class="my-4">
+            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
